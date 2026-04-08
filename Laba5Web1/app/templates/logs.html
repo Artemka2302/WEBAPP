@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Журнал посещений</h1>
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a {
+        padding: 8px 12px;
+        margin: 0 4px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+    .pagination span {
+        padding: 8px 12px;
+        margin: 0 4px;
+        background-color: #ddd;
+        border-radius: 4px;
+    }
+    .report-links {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 15px;
+    }
+    .report-links a {
+        padding: 10px 15px;
+        background-color: #2196F3;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+</style>
+<div class="report-links">
+    {% if current_user.role.name == 'admin' %}
+        <a href="{{ url_for('reports.pages_stats') }}">📊 Отчёт по страницам</a>
+        <a href="{{ url_for('reports.users_stats') }}">👥 Отчёт по пользователям</a>
+    {% endif %}
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Пользователь</th>
+            <th>Страница</th>
+            <th>Дата</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+            <td>
+                {% if log.user %}
+                    {{ log.user.surname }} {{ log.user.firstname }} {{ log.user.lastname }}
+                {% else %}
+                    Неаутентифицированный пользователь
+                {% endif %}
+            </td>
+            <td>{{ log.path }}</td>
+            <td>{{ log.created_at.strftime('%d.%m.%Y %H:%M:%S') }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4">Нет записей</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="pagination">
+    {% if pagination.has_prev %}
+        <a href="{{ url_for('reports.logs', page=pagination.prev_num) }}">« Предыдущая</a>
+    {% endif %}
+    
+    <span>Страница {{ pagination.page }} из {{ pagination.pages }}</span>
+    
+    {% if pagination.has_next %}
+        <a href="{{ url_for('reports.logs', page=pagination.next_num) }}">Следующая »</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <h1>Ваш профиль</h1>
+    
+    <p>Добро пожаловать, <strong>{{ current_user.username }}</strong>!</p>
+    <p>Это ваша личная страница.</p>
+    
+    <!-- Кнопка выхода -->
+    <a href="/logout">
+        <button style="padding: 10px; background: red; color: white; border: none; cursor: pointer;">
+            Выйти
+        </button>
+    </a>
+    
+    <br><br>
+    <a href="/">На главную</a>
+</body>
+{% endblock %}

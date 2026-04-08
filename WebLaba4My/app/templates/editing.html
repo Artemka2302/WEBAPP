@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Редактирование пользователя: {{ user.username }}</h1>
+
+<div style="display: flex; gap: 50px;">
+    <!-- Левая колонка - текущие данные -->
+    <div style="flex: 1; border: 1px solid #ddd; padding: 20px; border-radius: 5px;">
+        <h2>Текущие данные</h2>
+        
+        <p><strong>Фамилия:</strong> {{ user.surname }}</p>
+        <p><strong>Имя:</strong> {{ user.firstname }}</p>
+        <p><strong>Отчество:</strong> {{ user.lastname }}</p>
+        <p><strong>Роль:</strong> {{ user.user_role }}</p>
+        <p><strong>Дата регистрации:</strong> {{ user.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+    </div>
+    
+    <!-- Правая колонка - форма для новых данных -->
+    <div style="flex: 1; border: 1px solid #ddd; padding: 20px; border-radius: 5px;">
+        <h2>Новые данные</h2>
+        <form method="POST">
+            
+            <p>
+                <label>Фамилия:</label><br>
+                <input type="text" name="surname" placeholder="Новая фамилия">
+            </p>
+            <p>
+                <label>Имя:</label><br>
+                <input type="text" name="firstname" placeholder="Новое имя">
+            </p>
+            <p>
+                <label>Отчество:</label><br>
+                <input type="text" name="lastname" placeholder="Новое отчество">
+            </p>
+            <p>
+                <label>Роль:</label><br>
+    <select name="role_id">
+        {% for role in roles %}
+            <option value="{{ role.id }}" {% if user.role_id == role.id %}selected{% endif %}>
+                {{ role.name }} - {{ role.description }}
+            </option>
+        {% endfor %}
+    </select>
+            </p>
+            
+            <p>
+                <button type="submit">Сохранить изменения</button>
+                <a href="{{ url_for('correct') }}"><button type="button">Отмена</button></a>
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}

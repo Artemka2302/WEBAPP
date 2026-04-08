@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <h1>Вход в систему</h1>
+    {% if message %}
+    <p>{{message}}</p>
+    {% endif %}
+    <form method="post" action="{{ url_for('login') }}">
+        <!-- Поле для логина -->
+        <div>
+            <label>Логин:</label>
+            <input type="text" name="username" required>
+        </div>
+        
+        <!-- Поле для пароля -->
+        <div>
+            <label>Пароль:</label>
+            <input type="password" name="password" required>
+        </div>
+        
+        <!-- Чекбокс "Запомнить меня" -->
+        <div>
+            <label>
+                <input type="checkbox" name="remember"> Запомнить меня
+            </label>
+        </div>
+        
+        <!-- Кнопка отправки -->
+        <button type="submit">Войти</button>
+    </form>
+
+{% endblock %}

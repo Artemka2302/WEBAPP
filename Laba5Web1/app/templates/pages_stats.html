@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Статистика посещений по страницам</h1>
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    .export-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .back-link {
+        margin-top: 20px;
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #2196F3;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+</style>
+
+<table>
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Страница</th>
+            <th>Количество посещений</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stat in stats %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ stat.path }}</td>
+            <td>{{ stat.count }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3">Нет данных</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+    <button onclick="window.location.href='{{ url_for('reports.export_pages_csv')}}'" class="export-btn">
+        📥 Экспорт в CSV
+    </button>
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="{{ url_for('reports.logs') }}" class="back-link">← Назад к журналу</a>
+</div>
+{% endblock %}

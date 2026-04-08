@@ -1,0 +1,154 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    tr:hover {
+        background-color: #ddd;
+    }
+    button {
+        padding: 5px 10px;
+        margin: 0 2px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    button:nth-child(1) {
+        background-color: #2196F3;
+        color: white;
+    }
+    button:nth-child(2) {
+        background-color: #FFC107;
+    }
+    button:nth-child(3) {
+        background-color: #f44336;
+        color: white;
+    }
+    
+    /* Стили для модального окна */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 400px;
+        text-align: center;
+        border-radius: 5px;
+    }
+</style>
+
+<table>
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>ФИО</th>
+            <th>Роль</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ user.surname }} {{ user.firstname }} {{ user.lastname }}</td>
+            <td>
+                 {{ user.role.name if user.role else 'Нет роли' }}
+            </td>
+            <td>
+                <a href="{{ url_for('user_ak', user_id=user.id) }}">
+                    <button>Просмотр</button>
+                </a>
+
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('edit', user_id=user.id) }}">
+                        <button>Редактирование</button>
+                    </a>
+                    {% if current_user.id != user.id %}
+                    
+                    <button onclick="openModal({{user.id}}, '{{ user.surname }} {{ user.firstname }} {{ user.lastname }}')">
+                        Удаление
+                    </button>
+                    {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Модальное окно подтверждения удаления -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>Подтверждение удаления</h3>
+        <p>Вы уверены, что хотите удалить пользователя <span id="userName"></span>?</p>
+        
+        <form id="deleteForm" method="POST" style="display: inline;">
+            <button type="submit" style="padding: 10px 20px; background-color: #f44336; color: white; border: none; border-radius: 3px; margin: 5px;">
+                Да
+            </button>
+        </form>
+        
+        <button onclick="closeModal()" style="padding: 10px 20px; background-color: #ccc; border: none; border-radius: 3px; margin: 5px;">
+            Нет
+        </button>
+    </div>
+</div>
+
+{% if current_user.is_authenticated %}
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('reg') }}">
+            <button style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Добавить нового пользователя
+            </button>
+        </a>
+    </div>
+{% endif %}
+
+<script>
+    function openModal(userId, fullName) {
+        document.getElementById('deleteForm').action = "/delete_user/" + userId;
+        document.getElementById('userName').textContent = fullName;
+        document.getElementById('deleteModal').style.display = 'block';
+    }
+    
+    function closeModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+    
+    window.onclick = function(event) {
+        let modal = document.getElementById('deleteModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+
+{% endblock %}

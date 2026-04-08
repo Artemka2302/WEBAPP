@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Редактирование пользователя: {{ user.username }}</h1>
+
+<div style="display: flex; gap: 50px;">
+    <div style="flex: 1; border: 1px solid #ddd; padding: 20px; border-radius: 5px;">
+        <h2>Текущие данные</h2>
+        <p><strong>ID:</strong> {{ user.id }}</p>
+        <p><strong>Логин:</strong> {{ user.username }}</p>
+        <p><strong>Фамилия:</strong> {{ user.surname }}</p>
+        <p><strong>Имя:</strong> {{ user.firstname }}</p>
+        <p><strong>Отчество:</strong> {{ user.lastname }}</p>
+        <p><strong>Роль:</strong> {{ user.role.name if user.role else 'Нет роли' }}</p>
+        <p><strong>Дата регистрации:</strong> {{ user.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+    </div>
+    
+    <div style="flex: 1; border: 1px solid #ddd; padding: 20px; border-radius: 5px;">
+        <h2>Новые данные</h2>
+        <form method="POST">
+            <p>
+                <label>Логин:</label><br>
+                <input type="text" name="username" value="{{ user.username }}" placeholder="Новый логин">
+            </p>
+            <p>
+                <label>Фамилия:</label><br>
+                <input type="text" name="surname" value="{{ user.surname }}" placeholder="Новая фамилия">
+            </p>
+            <p>
+                <label>Имя:</label><br>
+                <input type="text" name="firstname" value="{{ user.firstname }}" placeholder="Новое имя">
+            </p>
+            <p>
+                <label>Отчество:</label><br>
+                <input type="text" name="lastname" value="{{ user.lastname }}" placeholder="Новое отчество">
+            </p>
+            
+            <p>
+                <label>Роль:</label><br>
+                {% if current_user.role.name == 'admin' %}
+                    <select name="role_id">
+                        {% for role in roles %}
+                            <option value="{{ role.id }}" {% if user.role_id == role.id %}selected{% endif %}>
+                                {{ role.name }} - {{ role.description }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <!-- Для обычного пользователя показываем название роли, но не даем менять -->
+                    <input type="text" value="{{ user.role.name if user.role else 'Нет роли' }}" disabled>
+                    <input type="hidden" name="role_id" value="{{ user.role_id }}">
+                {% endif %}
+            </p>
+            
+            <p>
+                <label>Новый пароль:</label><br>
+                <input type="password" name="password" placeholder="Оставьте пустым, если не меняете">
+            </p>
+            <p>
+                <button type="submit">Сохранить изменения</button>
+                <a href="{{ url_for('correct') }}"><button type="button">Отмена</button></a>
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}

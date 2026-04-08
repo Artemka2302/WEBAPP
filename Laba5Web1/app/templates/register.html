@@ -1,0 +1,93 @@
+\{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .error-input {
+        border: 2px solid red !important;
+        background-color: #ffeeee;
+    }
+    .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    .error-list {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+        padding-left: 20px;
+    }
+</style>
+
+<div>
+    <form method="post">
+        <p>
+            <label>Никнейм пользователя:</label><br>
+            <input type="text" name="username" value="{{ form_data.username or '' }}" 
+                   class="{% if errors.username %}error-input{% endif %}">
+            {% if errors.username %}
+                <div class="error-message">{{ errors.username }}</div>
+            {% endif %}
+        </p>
+        
+        <p>
+            <label>Пароль:</label><br>
+            <input type="password" name="password" value="{{ form_data.password or '' }}"
+                   class="{% if errors.password %}error-input{% endif %}">
+            {% if errors.password %}
+                <ul class="error-list">
+                {% for error in errors.password %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        
+        <p>
+            <label>Имя пользователя:</label><br>
+            <input type="text" name="firstname" value="{{ form_data.firstname or '' }}"
+                   class="{% if errors.firstname %}error-input{% endif %}">
+            {% if errors.firstname %}
+                <div class="error-message">{{ errors.firstname }}</div>
+            {% endif %}
+        </p>
+        
+        <p>
+            <label>Фамилия пользователя:</label><br>
+            <input type="text" name="surname" value="{{ form_data.surname or '' }}"
+                   class="{% if errors.surname %}error-input{% endif %}">
+            {% if errors.surname %}
+                <div class="error-message">{{ errors.surname }}</div>
+            {% endif %}
+        </p>
+        
+        <p>
+            <label>Отчество пользователя:</label><br>
+            <input type="text" name="lastname" value="{{ form_data.lastname or '' }}"
+                   class="{% if errors.lastname %}error-input{% endif %}">
+            {% if errors.lastname %}
+                <div class="error-message">{{ errors.lastname }}</div>
+            {% endif %}
+        </p>
+        
+        <p>
+            <label>Роль пользователя:</label><br>
+            <select name="role_id" class="{% if errors.role_id %}error-input{% endif %}">
+                <option value="">Выберите роль</option>
+                {% for role in roles %}
+                    <option value="{{ role.id }}" {% if form_data.role_id == role.id|string %}selected{% endif %}>
+                        {{ role.name }} - {{ role.description }}
+                    </option>
+                {% endfor %}
+            </select>
+            {% if errors.role_id %}
+                <div class="error-message">{{ errors.role_id }}</div>
+            {% endif %}
+        </p>
+        
+        <p>
+            <button type="submit">Зарегистрироваться</button>
+        </p>
+    </form>
+</div>
+{% endblock %}

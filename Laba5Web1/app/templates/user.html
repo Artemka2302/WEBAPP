@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Профиль пользователя</h1>
+
+<table border="1" style="border-collapse: collapse; width: 50%;">
+    <thead>
+        <tr>
+            <th style="padding: 10px; text-align: left;">Поле</th>
+            <th style="padding: 10px; text-align: left;">Значение</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding: 10px;"><strong>Идентификатор:</strong></td>
+            <td style="padding: 10px;">{{ user.id }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;"><strong>Логин:</strong></td>
+            <td style="padding: 10px;">{{ user.username }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;"><strong>Фамилия:</strong></td>
+            <td style="padding: 10px;">{{ user.surname }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;"><strong>Имя:</strong></td>
+            <td style="padding: 10px;">{{ user.firstname }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;"><strong>Отчество:</strong></td>
+            <td style="padding: 10px;">{{ user.lastname }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;"><strong>Название роли:</strong></td>
+            <td style="padding: 10px;">{{ user.role.name if user.role else 'Нет роли' }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;"><strong>Описание роли:</strong></td>
+            <td style="padding: 10px;">{{ user.role.description if user.role else 'Нет описания' }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;"><strong>Дата регистрации:</strong></td>
+            <td style="padding: 10px;">{{ user.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+    <a href="{{ url_for('correct') }}">← Назад к списку</a>
+</div> 
+{% endblock %}
