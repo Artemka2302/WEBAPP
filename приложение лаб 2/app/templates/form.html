@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    
+    <h1>Форма обратной связи</h1>
+     <!-- Форма -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('form') }}">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Имя</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="message" class="form-label">Сообщение</label>
+                    <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        </div>
+    </div>
+
+    {% if form_data %}
+    <div>
+        <p>Name = {{form_data.name}}</p>
+        <p>Email = {{form_data.email}}</p>
+        <p>message = {{form_data.message}}</p>
+    </div>
+    {% endif %}
+
+{% endblock %}

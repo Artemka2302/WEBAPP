@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Проверка номера</h1>
+    
+    <form method="POST">
+        <div class="mb-3">
+            <label for="phone" class="form-label">Телефон</label>
+            
+            <!-- Добавляем is-invalid если result начинается с "Недопустимый" -->
+            <input type="text" 
+                   class="form-control {% if result and result.startswith('Недопустимый') %}is-invalid{% endif %}"
+                   id="phone"
+                   name="phone" 
+                   placeholder="+7 (999) 123-45-67">
+            
+            <!-- Показываем ошибку в стиле Bootstrap -->
+            {% if result and result.startswith('Недопустимый') %}
+            <div class="invalid-feedback">
+                {{ result }}
+            </div>
+            {% endif %}
+            
+            <!-- Отдельно для ошибки "Введите номер телефона" -->
+            {% if result == "Введите номер телефона" %}
+            <div class="invalid-feedback">
+                {{ result }}
+            </div>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Проверить</button>
+    </form>
+    
+    <!-- Результат (если это не ошибка) -->
+    {% if result and not result.startswith('Недопустимый') and result != "Введите номер телефона" %}
+    <div class="card mt-3">
+        <div class="card-body">
+            <p>{{ result }}</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
